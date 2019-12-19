@@ -13,7 +13,7 @@ See  http://4suite.org/COPYRIGHT  for license and copyright information
 
 # stdlib
 from xml.dom import EMPTY_NAMESPACE
-from xml.xpath import NAMESPACE_NODE
+from xpath import NAMESPACE_NODE
 
 
 

@@ -19,12 +19,11 @@ import string
 from xml.dom import EMPTY_NAMESPACE
 from xml.dom import Node
 from xml.dom import XML_NAMESPACE
-import xml.dom.ext
 from xml.dom.NodeFilter import NodeFilter
-from xml.xpath import Compile
-from xml.xpath import g_xpathRecognizedNodes
+from xpath import g_xpathRecognizedNodes
 
-
+from ._compat import GetAllNs, SplitQName
+from . import Compile
 
 g_documentOrderIndex = {}
 
@@ -82,10 +81,10 @@ def ExpandQName(qname, refNode=None, namespaces=None):
     """
     nss = {}
     if refNode:
-        nss = xml.dom.ext.GetAllNs(refNode)
+        nss = GetAllNs(refNode)
     elif namespaces:
         nss = namespaces
-    (prefix, local) = xml.dom.ext.SplitQName(qname)
+    (prefix, local) = SplitQName(qname)
     # We're not to use the default namespace
     if prefix != "":
         split_name = (nss[prefix], local)

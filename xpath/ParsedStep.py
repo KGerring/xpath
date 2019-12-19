@@ -15,8 +15,8 @@ See  http://4suite.org/COPYRIGHT  for license and copyright information
 
 import sys
 from xml.dom import Node
-from xml.xpath import NamespaceNode
-from xml.xpath import Util
+from xpath import NamespaceNode
+from xpath import Util
 
 
 

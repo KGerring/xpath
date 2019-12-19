@@ -15,11 +15,11 @@ See  http://4suite.org/COPYRIGHT  for license and copyright information
 
 import string
 from xml.dom import Node
-from xml.dom.ext import GetAllNs
-from xml.xpath import g_xpathRecognizedNodes
-from xml.xpath import NAMESPACE_NODE
-from xml.xpath import NamespaceNode
-from xml.xpath import Util
+from ._compat import GetAllNs
+from xpath import g_xpathRecognizedNodes
+from xpath import NAMESPACE_NODE
+from xpath import NamespaceNode
+from xpath import Util
 
 
 

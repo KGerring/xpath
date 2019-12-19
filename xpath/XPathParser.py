@@ -1556,15 +1556,15 @@ new = Parser
 
 from functools import reduce
 import re
-from xml.xpath import ParsedAbbreviatedAbsoluteLocationPath
-from xml.xpath import ParsedAbbreviatedRelativeLocationPath
-from xml.xpath import ParsedAbsoluteLocationPath
-from xml.xpath import ParsedAxisSpecifier
-from xml.xpath import ParsedExpr
-from xml.xpath import ParsedNodeTest
-from xml.xpath import ParsedPredicateList
-from xml.xpath import ParsedRelativeLocationPath
-from xml.xpath import ParsedStep
+from xpath import ParsedAbbreviatedAbsoluteLocationPath
+from xpath import ParsedAbbreviatedRelativeLocationPath
+from xpath import ParsedAbsoluteLocationPath
+from xpath import ParsedAxisSpecifier
+from xpath import ParsedExpr
+from xpath import ParsedNodeTest
+from xpath import ParsedPredicateList
+from xpath import ParsedRelativeLocationPath
+from xpath import ParsedStep
 
 
 

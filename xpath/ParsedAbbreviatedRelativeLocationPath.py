@@ -12,10 +12,10 @@ See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
 
 # stdlib
-from xml.xpath import ParsedAxisSpecifier
-from xml.xpath import ParsedNodeTest
-from xml.xpath import ParsedPredicateList
-from xml.xpath import ParsedStep
+from xpath import ParsedAxisSpecifier
+from xpath import ParsedNodeTest
+from xpath import ParsedPredicateList
+from xpath import ParsedStep
 
 # localfolder
 from . import Set

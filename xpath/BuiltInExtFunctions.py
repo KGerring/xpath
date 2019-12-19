@@ -21,14 +21,18 @@ import urllib.parse
 import urllib.request
 from xml.dom import EMPTY_NAMESPACE
 from xml.dom import Node
-from xml.dom.Text import Text
-from xml.utils import boolean
-from xml.xpath import Conversions
-from xml.xpath import CoreFunctions
-from xml.xpath import FT_EXT_NAMESPACE
-from xml.xpath import FT_OLD_EXT_NAMESPACE
-
-
+from xml.dom.minidom import Text
+from xpath import Conversions
+from xpath import CoreFunctions
+from xpath import FT_EXT_NAMESPACE
+from xpath import FT_OLD_EXT_NAMESPACE
+try:
+    from ._compat import boolean
+except Exception:
+    class BooleanType:
+        true = True
+        false = False
+    boolean = BooleanType
 
 def Version(context):
     __version__ = "0.1.0"
@@ -190,9 +194,9 @@ def IsoTime(context):
 
 
 def Evaluate(context, expr):
-    import xml.xpath
+    import xpath
 
-    return xml.xpath.Evaluate(Conversions.StringValue(st), context=context)
+    return xpath.Evaluate(Conversions.StringValue(st), context=context)
 
 
 def GenerateUuid(context=None):

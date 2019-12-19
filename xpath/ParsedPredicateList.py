@@ -15,7 +15,7 @@ See  http://4suite.org/COPYRIGHT  for license and copyright information
 
 from functools import reduce
 import types
-from xml.xpath import Conversions
+from xpath import Conversions
 
 
 

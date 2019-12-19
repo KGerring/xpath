@@ -12,28 +12,34 @@ See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
 
 # stdlib
-
+from ._compat import get_translator
 from functools import reduce
 import io
 import string
 import types
 from xml.dom import EMPTY_NAMESPACE
 from xml.dom import Node
-from xml.FtCore import get_translator
-from xml.utils import boolean
-from xml.xpath import CompiletimeException
-from xml.xpath import Conversions
-from xml.xpath import ExpandedNameWrapper
-from xml.xpath import Inf
-from xml.xpath import NAMESPACE_NODE
-from xml.xpath import NamespaceNode
-from xml.xpath import NaN
-from xml.xpath import RuntimeException
-from xml.xpath import Util
+from xpath.exceptions import CompiletimeException
+from xpath import Conversions
+from xpath import ExpandedNameWrapper
+from xpath import Inf
+from xpath import NAMESPACE_NODE
+from xpath import NamespaceNode
+from xpath import NaN
+from xpath import RuntimeException
+from xpath import Util
+
+try:
+    from ._compat import boolean
+except Exception:
+    class BooleanType:
+        false = False
+        true = True
+    
+    boolean = BooleanType
 
 
-
-_ = get_translator("xpath")
+_ = str
 
 
 class Types:

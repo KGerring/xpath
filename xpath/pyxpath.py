@@ -6,20 +6,23 @@ from __future__ import annotations  # isort:skip
 import sys  # isort:skip
 import os  # isort:skip
 # stdlib
+import zope.deferredimport
 
 import string
 import types
-from xml.xpath import ParsedExpr
-from xml.xpath import ParsedNodeTest
-from xml.xpath.ParsedAbbreviatedAbsoluteLocationPath import (
+
+zope.deferredimport.define(ParsedNodeTest = 'xpath.ParsedNodeTest')
+
+#from . import ParsedNodeTest
+from xpath.ParsedAbbreviatedAbsoluteLocationPath import (
     ParsedAbbreviatedAbsoluteLocationPath,)
-from xml.xpath.ParsedAbbreviatedRelativeLocationPath import (
+from xpath.ParsedAbbreviatedRelativeLocationPath import (
     ParsedAbbreviatedRelativeLocationPath,)
-from xml.xpath.ParsedAbsoluteLocationPath import ParsedAbsoluteLocationPath
-from xml.xpath.ParsedAxisSpecifier import ParsedAxisSpecifier
-from xml.xpath.ParsedPredicateList import ParsedPredicateList
-from xml.xpath.ParsedRelativeLocationPath import ParsedRelativeLocationPath
-from xml.xpath.ParsedStep import ParsedStep
+from xpath.ParsedAbsoluteLocationPath import ParsedAbsoluteLocationPath
+from xpath.ParsedAxisSpecifier import ParsedAxisSpecifier
+from xpath.ParsedPredicateList import ParsedPredicateList
+from xpath.ParsedRelativeLocationPath import ParsedRelativeLocationPath
+from xpath.ParsedStep import ParsedStep
 
 # localfolder
 from .exceptions import NoMoreTokens
@@ -101,8 +104,8 @@ try:
 except:
     _xslt_patterns = 0
 
-
-
+zope.deferredimport.define(ParsedExpr = 'xpath.ParsedExpr')
+#from . import ParsedExpr
 class FtFactory:
     createAbsoluteLocationPath = PALP
     createAbbreviatedAbsoluteLocationPath = PAALP
@@ -164,7 +167,7 @@ class FtFactory:
         if prefix:
             return ParsedNodeTest.QualifiedNameTest(prefix, local)
         return ParsedNodeTest.NodeNameTest(local)
-
+    from xpath import ParsedExpr
     opMap = {
         OR_OPERATOR: ParsedExpr.ParsedOrExpr,
         AND_OPERATOR: ParsedExpr.ParsedAndExpr,

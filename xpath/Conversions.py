@@ -18,14 +18,19 @@ import io
 import string
 import types
 from xml.dom import Node
-from xml.utils import boolean
-from xml.xpath import ExpandedNameWrapper
-from xml.xpath import Inf
-from xml.xpath import NAMESPACE_NODE
-from xml.xpath import NamespaceNode
-from xml.xpath import NaN
-from xml.xpath import Util
-
+from xpath import ExpandedNameWrapper
+from xpath import Inf
+from xpath import NAMESPACE_NODE
+from xpath import NamespaceNode
+from xpath import NaN
+from xpath import Util
+try:
+    from ._compat import BooleanType, boolean
+except Exception:
+    class BooleanType:
+        true = True
+        false = False
+    boolean = BooleanType
 
 
 try:
@@ -165,14 +170,15 @@ def _strInstance(object):
             return CoreStringValue(object.documentElement)
     return None
 
-
+InstanceType = object()
 _strConversions = {
     bytes: str,
     int: str,
     int: lambda l: repr(l)[:-1],
     float: lambda f: f is NaN and "NaN" or "%g" % f,
-    boolean.BooleanType: str,
-    types.InstanceType: _strInstance,
+    boolean: str,
+    BooleanType: str,
+    InstanceType: _strInstance,
     list: lambda x: x and _strConversions.get(type(x[0]), _strUnknown)(x[0]) or "",
 }
 

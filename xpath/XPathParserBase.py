@@ -4,7 +4,6 @@ try:
     locale_dir = os.path.split(__file__)[0]
     gettext.install("4Suite", locale_dir)
 except (ImportError, AttributeError, IOError):
-
     def _(msg):
         return msg
 
@@ -16,25 +15,7 @@ INTERNAL_ERR_MSG = _(
     "Error parsing expression:\n'%s'\nInternal error in processing at or near '%s', Line: %d, Exception: %s"
 )
 
-
-class SyntaxException(Exception):
-    def __init__(self, source, lineNum, location):
-        Exception.__init__(self, SYNTAX_ERR_MSG % (source, location, lineNum))
-        self.source = source
-        self.lineNum = lineNum
-        self.loc = location
-
-
-class InternalException(Exception):
-    def __init__(self, source, lineNum, location, exc, val, tb):
-        Exception.__init__(self, INTERNAL_ERR_MSG % (source, location, lineNum, exc))
-        self.source = source
-        self.lineNum = lineNum
-        self.loc = location
-        self.errorType = exc
-        self.errorValue = val
-        self.errorTraceback = tb
-
+from .exceptions import SyntaxException, InternalException
 
 class XPathParserBase:
     def __init__(self):

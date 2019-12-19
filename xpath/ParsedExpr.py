@@ -17,23 +17,28 @@ import collections
 import string
 import types
 from xml.dom import EMPTY_NAMESPACE
-from xml.dom.ext import SplitQName
-from xml.utils import boolean
-from xml.xpath import CompiletimeException
-from xml.xpath import Conversions
-from xml.xpath import CoreFunctions
-from xml.xpath import g_extFunctions
-from xml.xpath import Inf
-from xml.xpath import NaN
-from xml.xpath import ParsedAxisSpecifier
-from xml.xpath import ParsedNodeTest
-from xml.xpath import ParsedStep
-from xml.xpath import RuntimeException
-from xml.xpath import Util
-
+from ._compat import SplitQName
+from xpath import CompiletimeException
+from xpath import Conversions
+from xpath import CoreFunctions
+from xpath import g_extFunctions
+from xpath import Inf
+from xpath import NaN
+from xpath import ParsedAxisSpecifier
+from xpath import ParsedNodeTest
+from xpath import ParsedStep
+from xpath import RuntimeException
+from xpath import Util
 # localfolder
 from . import Set
-
+try:
+    from ._compat import boolean
+except Exception:
+    class BooleanType:
+        false = False
+        true = True
+    
+    boolean = BooleanType
 
 
 class StringException(Exception):
@@ -324,7 +329,7 @@ class ParsedPathExpr:
         if descendant:
             nt = ParsedNodeTest.ParsedNodeTest("node", "")
             axis = ParsedAxisSpecifier.ParsedAxisSpecifier("descendant-or-self")
-            from xml.xpath import ParsedPredicateList
+            from xpath import ParsedPredicateList
 
             pList = ParsedPredicateList.ParsedPredicateList([])
             self._step = ParsedStep.ParsedStep(axis, nt, pList)
