@@ -11,19 +11,27 @@ Copyright (c) 2000-2001 Fourthought Inc, USA.   All Rights Reserved.
 See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
 
-import string, io
+# stdlib
 
-from xml.dom import Node, EMPTY_NAMESPACE
-from xml.xpath import ExpandedNameWrapper
-from xml.xpath import NamespaceNode
-from xml.xpath import NaN, Inf
-from xml.xpath import Util, Conversions
-from xml.xpath import NAMESPACE_NODE
-from xml.xpath import CompiletimeException, RuntimeException
-from xml.utils import boolean
-
-from xml.FtCore import get_translator
 from functools import reduce
+import io
+import string
+import types
+from xml.dom import EMPTY_NAMESPACE
+from xml.dom import Node
+from xml.FtCore import get_translator
+from xml.utils import boolean
+from xml.xpath import CompiletimeException
+from xml.xpath import Conversions
+from xml.xpath import ExpandedNameWrapper
+from xml.xpath import Inf
+from xml.xpath import NAMESPACE_NODE
+from xml.xpath import NamespaceNode
+from xml.xpath import NaN
+from xml.xpath import RuntimeException
+from xml.xpath import Util
+
+
 
 _ = get_translator("xpath")
 
@@ -36,7 +44,6 @@ class Types:
     ObjectType = 4
 
 
-import types
 
 try:
     g_stringTypes = [bytes, str]

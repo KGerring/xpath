@@ -1550,17 +1550,23 @@ class Parser:
 
 new = Parser
 
+# stdlib
 # modules required for action routines
-from xml.xpath import ParsedAbsoluteLocationPath
-from xml.xpath import ParsedRelativeLocationPath
-from xml.xpath import ParsedPredicateList
-from xml.xpath import ParsedStep
-from xml.xpath import ParsedAxisSpecifier
-from xml.xpath import ParsedNodeTest
+# the expressions and information for each rule
+
+from functools import reduce
+import re
 from xml.xpath import ParsedAbbreviatedAbsoluteLocationPath
 from xml.xpath import ParsedAbbreviatedRelativeLocationPath
+from xml.xpath import ParsedAbsoluteLocationPath
+from xml.xpath import ParsedAxisSpecifier
 from xml.xpath import ParsedExpr
-from functools import reduce
+from xml.xpath import ParsedNodeTest
+from xml.xpath import ParsedPredicateList
+from xml.xpath import ParsedRelativeLocationPath
+from xml.xpath import ParsedStep
+
+
 
 # the action code for each rule
 def absoluteLocationPath1(self, __stack, __ptr):
@@ -1995,8 +2001,6 @@ action_routines = [
 INITIAL = 1
 OPERATOR = 2
 
-# the expressions and information for each rule
-import re
 
 patterns = {
     INITIAL: re.compile(

@@ -11,8 +11,12 @@ Copyright (c) 2000-2001 Fourthought Inc, USA.   All Rights Reserved.
 See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
 
+# stdlib
 import xml.dom.ext
+
+# localfolder
 from . import CoreFunctions
+
 
 
 class Context:

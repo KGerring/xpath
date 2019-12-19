@@ -3,12 +3,15 @@
 
 """Tests for `xpath` package."""
 
-import pytest
+# firstparty
+from xpath import cli
+from xpath import xpath
+
+# thirdparty
 
 from click.testing import CliRunner
+import pytest
 
-from xpath import xpath
-from xpath import cli
 
 
 @pytest.fixture

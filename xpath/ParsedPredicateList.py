@@ -11,9 +11,13 @@ Copyright (c) 2000-2001 Fourthought Inc, USA.   All Rights Reserved.
 See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
 
-from xml.xpath import Conversions
-import types
+# stdlib
+
 from functools import reduce
+import types
+from xml.xpath import Conversions
+
+
 
 NumberTypes = [int, int, float]
 

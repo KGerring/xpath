@@ -11,12 +11,20 @@ Copyright (c) 2000-2001 Fourthought Inc, USA.   All Rights Reserved.
 See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
 
-import os, glob, string
-import xml.dom.ext
-from xml.dom import XML_NAMESPACE, EMPTY_NAMESPACE
+# stdlib
+
+import glob
+import os
+import string
+from xml.dom import EMPTY_NAMESPACE
 from xml.dom import Node
+from xml.dom import XML_NAMESPACE
+import xml.dom.ext
 from xml.dom.NodeFilter import NodeFilter
-from xml.xpath import g_xpathRecognizedNodes, Compile
+from xml.xpath import Compile
+from xml.xpath import g_xpathRecognizedNodes
+
+
 
 g_documentOrderIndex = {}
 

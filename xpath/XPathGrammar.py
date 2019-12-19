@@ -16,9 +16,21 @@
 # - left-factorization was applied where necessary
 # - semantic values were attached to non-terminals
 
-from string import *
+# stdlib
+# Reimplement scanner, to properly use disambiguation
+
 import re
+import string
+from string import *
+import sys
+
+# firstparty
+# redefine to add additional attributes
+import xpath.pyxpath as pyxpath
+
+# localfolder
 from .yappsrt import *
+
 
 
 class XPathScanner(Scanner):
@@ -949,8 +961,6 @@ def parse(rule, text):
     return wrap_error_reporter(P, rule)
 
 
-# Reimplement scanner, to properly use disambiguation
-import re, sys
 
 NCName = "[a-zA-Z_](\w|[_.-])*"
 # In this version of QName, the namespace prefix is not optional.
@@ -1115,9 +1125,6 @@ class XPathScanner:
         return self.tokens[i]
 
 
-# redefine to add additional attributes
-import xpath.pyxpath as pyxpath
-import string
 
 GeneratedXPath = XPath
 

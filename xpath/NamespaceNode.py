@@ -11,8 +11,10 @@ Copyright (c) 2000-2001 Fourthought Inc, USA.   All Rights Reserved.
 See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
 
+# stdlib
 from xml.dom import EMPTY_NAMESPACE
 from xml.xpath import NAMESPACE_NODE
+
 
 
 class NamespaceNode:

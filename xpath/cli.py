@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
 """Console script for xpath."""
+# stdlib
 import sys
+
+# thirdparty
 import click
+
 
 
 @click.command()

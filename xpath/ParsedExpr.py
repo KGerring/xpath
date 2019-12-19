@@ -11,19 +11,29 @@ Copyright (c) 2000-2001 Fourthought Inc, USA.   All Rights Reserved.
 See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
 
-import string, collections, types
+# stdlib
 
+import collections
+import string
+import types
 from xml.dom import EMPTY_NAMESPACE
 from xml.dom.ext import SplitQName
-from xml.xpath import CompiletimeException, RuntimeException
-from xml.xpath import g_extFunctions
-from xml.xpath import ParsedNodeTest
-from xml.xpath import CoreFunctions, Conversions
-from xml.xpath import Util
-from xml.xpath import ParsedStep
-from xml.xpath import ParsedAxisSpecifier
 from xml.utils import boolean
+from xml.xpath import CompiletimeException
+from xml.xpath import Conversions
+from xml.xpath import CoreFunctions
+from xml.xpath import g_extFunctions
+from xml.xpath import Inf
+from xml.xpath import NaN
+from xml.xpath import ParsedAxisSpecifier
+from xml.xpath import ParsedNodeTest
+from xml.xpath import ParsedStep
+from xml.xpath import RuntimeException
+from xml.xpath import Util
+
+# localfolder
 from . import Set
+
 
 
 class StringException(Exception):
@@ -635,7 +645,6 @@ class ParsedAdditiveExpr:
         return repr(self._left) + op + repr(self._right)
 
 
-from xml.xpath import Inf, NaN
 
 
 class ParsedMultiplicativeExpr:

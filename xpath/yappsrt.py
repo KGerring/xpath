@@ -2,10 +2,16 @@
 #
 # This module is needed to run generated parsers.
 
+# stdlib
 # from string import *
 # import exceptions
 import re
-from .exceptions import NoMoreTokens, XPathSyntaxError, StringException
+
+# localfolder
+from .exceptions import NoMoreTokens
+from .exceptions import StringException
+from .exceptions import XPathSyntaxError
+
 
 
 class Scanner:

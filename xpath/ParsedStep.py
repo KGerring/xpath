@@ -11,11 +11,13 @@ Copyright (c) 2000-2001 Fourthought Inc, USA.   All Rights Reserved.
 See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
 
-from xml.dom import Node
-from xml.xpath import Util
-from xml.xpath import NamespaceNode
+# stdlib
 
 import sys
+from xml.dom import Node
+from xml.xpath import NamespaceNode
+from xml.xpath import Util
+
 
 
 class ParsedStep:

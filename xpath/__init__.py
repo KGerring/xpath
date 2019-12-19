@@ -19,8 +19,18 @@ FT_EXT_NAMESPACE = "http://xmlns.4suite.org/ext"
 Inf = Inf = 1e300 * 1e300
 NaN = Inf - Inf
 
+# stdlib
 from xml.dom import Node
 from xml.FtCore import FtException
+
+# localfolder
+# Allow access to the NormalizeNode function
+from . import Context
+from . import MessageSource
+from .Util import NormalizeNode
+from .XPathParserBase import SyntaxException
+
+
 
 g_xpathRecognizedNodes = [
     Node.ELEMENT_NODE,
@@ -55,9 +65,7 @@ class RuntimeException(FtException):
         FtException.__init__(self, errorCode, MessageSource.RUNTIME, args)
 
 
-from .XPathParserBase import SyntaxException
 
-from . import MessageSource
 
 
 def Evaluate(expr, contextNode=None, context=None):
@@ -105,10 +113,7 @@ def RegisterExtensionModules(moduleNames):
     return mods
 
 
-# Allow access to the NormalizeNode function
-from .Util import NormalizeNode
 
-from . import Context
 
 try:
     import XPathParserc

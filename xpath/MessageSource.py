@@ -1,6 +1,9 @@
-from xml.xpath import RuntimeException, CompiletimeException
-
+# stdlib
 from xml.FtCore import get_translator
+from xml.xpath import CompiletimeException
+from xml.xpath import RuntimeException
+
+
 
 _ = get_translator("xpath")
 

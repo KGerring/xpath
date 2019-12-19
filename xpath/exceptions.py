@@ -7,8 +7,10 @@ from __future__ import annotations  # isort:skip
 import sys  # isort:skip
 import os  # isort:skip
 import re  # isort:skip
-import importlib
+# stdlib
 import contextlib
+import importlib
+
 
 
 def _try_import(name, *, absolute=False):

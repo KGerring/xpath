@@ -11,10 +11,13 @@ Copyright (c) 2000-2001 Fourthought Inc, USA.   All Rights Reserved.
 See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
 
+# stdlib
+from xml.xpath import ParsedAxisSpecifier
 from xml.xpath import ParsedNodeTest
 from xml.xpath import ParsedPredicateList
 from xml.xpath import ParsedStep
-from xml.xpath import ParsedAxisSpecifier
+
+
 
 LOOKAHEAD_OPTIMIZERS = {}
 

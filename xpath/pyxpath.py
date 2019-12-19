@@ -5,7 +5,28 @@
 from __future__ import annotations  # isort:skip
 import sys  # isort:skip
 import os  # isort:skip
-from .exceptions import NoMoreTokens, XPathSyntaxError, StringException
+# stdlib
+
+import string
+import types
+from xml.xpath import ParsedExpr
+from xml.xpath import ParsedNodeTest
+from xml.xpath.ParsedAbbreviatedAbsoluteLocationPath import (
+    ParsedAbbreviatedAbsoluteLocationPath,)
+from xml.xpath.ParsedAbbreviatedRelativeLocationPath import (
+    ParsedAbbreviatedRelativeLocationPath,)
+from xml.xpath.ParsedAbsoluteLocationPath import ParsedAbsoluteLocationPath
+from xml.xpath.ParsedAxisSpecifier import ParsedAxisSpecifier
+from xml.xpath.ParsedPredicateList import ParsedPredicateList
+from xml.xpath.ParsedRelativeLocationPath import ParsedRelativeLocationPath
+from xml.xpath.ParsedStep import ParsedStep
+
+# localfolder
+from .exceptions import NoMoreTokens
+from .exceptions import StringException
+from .exceptions import XPathSyntaxError
+
+
 
 # Expression types
 ABSOLUTE_LOCATION_PATH = 1
@@ -62,26 +83,12 @@ DIV_OPERATOR = 12
 MOD_OPERATOR = 13
 UNION_OPERATOR = 14
 
-from xml.xpath import ParsedExpr, ParsedNodeTest
-from xml.xpath.ParsedAbsoluteLocationPath import ParsedAbsoluteLocationPath
-from xml.xpath.ParsedRelativeLocationPath import ParsedRelativeLocationPath
-from xml.xpath.ParsedAbbreviatedRelativeLocationPath import (
-    ParsedAbbreviatedRelativeLocationPath,
-)
-from xml.xpath.ParsedAbbreviatedAbsoluteLocationPath import (
-    ParsedAbbreviatedAbsoluteLocationPath,
-)
 
 PALP = ParsedAbsoluteLocationPath
 PRLP = ParsedRelativeLocationPath
 PAALP = ParsedAbbreviatedAbsoluteLocationPath
 PARLP = ParsedAbbreviatedRelativeLocationPath
-from xml.xpath.ParsedStep import ParsedStep
-from xml.xpath.ParsedAxisSpecifier import ParsedAxisSpecifier
-from xml.xpath.ParsedPredicateList import ParsedPredicateList
 
-from xml.xpath.ParsedAbsoluteLocationPath import ParsedAbsoluteLocationPath
-from xml.xpath.ParsedRelativeLocationPath import ParsedRelativeLocationPath
 
 # XSLT
 try:
@@ -94,7 +101,6 @@ try:
 except:
     _xslt_patterns = 0
 
-import string, types
 
 
 class FtFactory:

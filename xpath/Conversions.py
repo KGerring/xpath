@@ -11,18 +11,22 @@ Copyright (c) 2000-2001 Fourthought Inc, USA.   All Rights Reserved.
 See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
 
-import string, io
+# stdlib
 
-from xml.dom import Node
-from xml.xpath import ExpandedNameWrapper
-from xml.xpath import NamespaceNode
-from xml.xpath import NaN, Inf
-from xml.xpath import Util
-from xml.xpath import NAMESPACE_NODE
-from xml.utils import boolean
-
-import types
 from functools import reduce
+import io
+import string
+import types
+from xml.dom import Node
+from xml.utils import boolean
+from xml.xpath import ExpandedNameWrapper
+from xml.xpath import Inf
+from xml.xpath import NAMESPACE_NODE
+from xml.xpath import NamespaceNode
+from xml.xpath import NaN
+from xml.xpath import Util
+
+
 
 try:
     g_stringTypes = [bytes, str]

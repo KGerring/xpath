@@ -9,7 +9,9 @@ WWW: http://4suite.org/         e-mail: support@4suite.org
 Copyright (c) 2000-2001 Fourthought Inc, USA.   All Rights Reserved.
 See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
+# stdlib
 from functools import reduce
+
 
 
 def Not(original, other):
