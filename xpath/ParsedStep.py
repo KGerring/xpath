@@ -17,6 +17,7 @@ from xml.xpath import NamespaceNode
 
 import sys
 
+
 class ParsedStep:
     def __init__(self, axis, nodeTest, predicates=None):
         self._axis = axis
@@ -33,23 +34,25 @@ class ParsedStep:
         if self._predicates and len(node_set):
             node_set = self._predicates.filter(node_set, context, reverse)
         return node_set
+
     select = evaluate
-    
-    def pprint(self, indent=''):
+
+    def pprint(self, indent=""):
         print((indent + str(self)))
-        self._axis.pprint(indent + '  ')
-        self._nodeTest.pprint(indent + '  ')
-        self._predicates and self._predicates.pprint(indent + '  ')
+        self._axis.pprint(indent + "  ")
+        self._nodeTest.pprint(indent + "  ")
+        self._predicates and self._predicates.pprint(indent + "  ")
 
     def __str__(self):
-        return '<Step at %x: %s>' % (id(self), repr(self))
+        return "<Step at %x: %s>" % (id(self), repr(self))
 
     def __repr__(self):
-        result = repr(self._axis) + '::' + repr(self._nodeTest)
+        result = repr(self._axis) + "::" + repr(self._nodeTest)
         if self._predicates:
             result = result + repr(self._predicates)
         return result
-        
+
+
 class ParsedAbbreviatedStep:
     def __init__(self, parent):
         self.parent = parent
@@ -60,17 +63,19 @@ class ParsedAbbreviatedStep:
                 return [context.node.ownerElement]
             return context.node.parentNode and [context.node.parentNode] or []
         return [context.node]
+
     select = evaluate
 
-    def pprint(self, indent=''):
+    def pprint(self, indent=""):
         print((indent + str(self)))
 
     def __str__(self):
-        return '<AbbreviatedStep at %x: %s>' % (id(self), repr(self))
+        return "<AbbreviatedStep at %x: %s>" % (id(self), repr(self))
 
     def __repr__(self):
-        return self.parent and '..' or '.'
-        
+        return self.parent and ".." or "."
+
+
 # From the XPath 2.0 Working Draft
 # Used by XPointer
 class ParsedNodeSetFunction:
@@ -86,20 +91,22 @@ class ParsedNodeSetFunction:
         """
         node_set = self._function.evaluate(context)
         if type(node_set) != type([]):
-            raise SyntaxError('%s does not evaluate to a node-set' %
-                              repr(self._function))
+            raise SyntaxError(
+                "%s does not evaluate to a node-set" % repr(self._function)
+            )
         if self._predicates and len(node_set):
             node_set = self._predicates.filter(node_set, context, reverse)
         return node_set
+
     select = evaluate
-    
-    def pprint(self, indent=''):
+
+    def pprint(self, indent=""):
         print((indent + str(self)))
-        self._function.pprint(indent + '  ')
-        self._predicates and self._predicates.pprint(indent + '  ')
+        self._function.pprint(indent + "  ")
+        self._predicates and self._predicates.pprint(indent + "  ")
 
     def __str__(self):
-        return '<Step at %x: %s>' % (id(self), repr(self))
+        return "<Step at %x: %s>" % (id(self), repr(self))
 
     def __repr__(self):
         result = repr(self._function)

@@ -22,16 +22,18 @@ from xml.dom.ext import GetAllNs
 
 import string
 
+
 def ParsedAxisSpecifier(axis):
     try:
         return g_classMap[axis](axis)
     except KeyError:
         raise SyntaxError("Invalid axis: %s" % axis)
 
+
 class AxisSpecifier:
 
     principalType = Node.ELEMENT_NODE
-    
+
     def __init__(self, axis):
         self._axis = axis
 
@@ -50,11 +52,11 @@ class AxisSpecifier:
                 self.descendants(context, nodeTest, child, nodeSet)
         return (nodeSet, 0)
 
-    def pprint(self, indent=''):
+    def pprint(self, indent=""):
         print((indent + str(self)))
 
     def __str__(self):
-        return '<AxisSpecifier at %x: %s>' % (id(self), repr(self))
+        return "<AxisSpecifier at %x: %s>" % (id(self), repr(self))
 
     def __repr__(self):
         """Always displays verbose expression"""
@@ -65,13 +67,16 @@ class ParsedAncestorAxisSpecifier(AxisSpecifier):
     def select(self, context, nodeTest):
         """Select all of the ancestors including the root"""
         nodeSet = []
-        parent = ((context.node.nodeType == Node.ATTRIBUTE_NODE) and
-                context.node.ownerElement or context.node.parentNode)
+        parent = (
+            (context.node.nodeType == Node.ATTRIBUTE_NODE)
+            and context.node.ownerElement
+            or context.node.parentNode
+        )
         while parent:
             if nodeTest(context, parent, self.principalType):
                 nodeSet.append(parent)
             parent = parent.parentNode
-        nodeSet.reverse() 
+        nodeSet.reverse()
         return (nodeSet, 1)
 
 
@@ -83,13 +88,16 @@ class ParsedAncestorOrSelfAxisSpecifier(AxisSpecifier):
             nodeSet = [node]
         else:
             nodeSet = []
-        parent = ((node.nodeType == Node.ATTRIBUTE_NODE) and
-                node.ownerElement or node.parentNode)
+        parent = (
+            (node.nodeType == Node.ATTRIBUTE_NODE)
+            and node.ownerElement
+            or node.parentNode
+        )
         while parent:
             if nodeTest(context, parent, self.principalType):
                 nodeSet.append(parent)
             parent = parent.parentNode
-        nodeSet.reverse() 
+        nodeSet.reverse()
         return (nodeSet, 1)
 
 
@@ -100,18 +108,28 @@ class ParsedAttributeAxisSpecifier(AxisSpecifier):
     def select(self, context, nodeTest):
         """Select all of the attributes from the context node"""
         attrs = context.node.attributes
-        rt = list(filter(lambda attr, test=nodeTest, context=context, pt=self.principalType:
-                    test(context, attr, pt),
-                    attrs and list(attrs.values()) or []))
+        rt = list(
+            filter(
+                lambda attr, test=nodeTest, context=context, pt=self.principalType: test(
+                    context, attr, pt
+                ),
+                attrs and list(attrs.values()) or [],
+            )
+        )
         return (rt, 0)
 
 
 class ParsedChildAxisSpecifier(AxisSpecifier):
     def select(self, context, nodeTest):
         """Select all of the children of the context node"""
-        rt = list(filter(lambda node, test=nodeTest, context=context, pt=self.principalType:
-                    test(context, node, pt),
-                    list(context.node.childNodes)))
+        rt = list(
+            filter(
+                lambda node, test=nodeTest, context=context, pt=self.principalType: test(
+                    context, node, pt
+                ),
+                list(context.node.childNodes),
+            )
+        )
         return (rt, 0)
 
 
@@ -146,7 +164,7 @@ class ParsedFollowingSiblingAxisSpecifier(AxisSpecifier):
 
 
 class ParsedFollowingAxisSpecifier(AxisSpecifier):
-    def select(self,context, nodeTest):
+    def select(self, context, nodeTest):
         """
         Select all of the nodes the follow the context node,
         not including descendants.
@@ -160,27 +178,29 @@ class ParsedFollowingAxisSpecifier(AxisSpecifier):
                     result.append(sibling)
                 self.descendants(context, nodeTest, sibling, result)
                 sibling = sibling.nextSibling
-            curr = ((curr.nodeType == Node.ATTRIBUTE_NODE) and
-                    curr.ownerElement or curr.parentNode)
+            curr = (
+                (curr.nodeType == Node.ATTRIBUTE_NODE)
+                and curr.ownerElement
+                or curr.parentNode
+            )
         return (result, 0)
 
 
 class ParsedNamespaceAxisSpecifier(AxisSpecifier):
 
     principalType = NAMESPACE_NODE
-    
+
     def select(self, context, nodeTest):
         """Select all of the namespaces from the context"""
         if context.node.nodeType != Node.ELEMENT_NODE:
             return ([], 0)
         result = []
-        #nss = context.nss()
+        # nss = context.nss()
         nss = GetAllNs(context.node)
         for prefix in list(nss.keys()):
             nsNode = NamespaceNode.NamespaceNode(
-                prefix, nss[prefix],
-                (context.node.ownerDocument or context.node)
-                )
+                prefix, nss[prefix], (context.node.ownerDocument or context.node)
+            )
             if nodeTest(context, nsNode, self.principalType):
                 result.append(nsNode)
         return (result, 0)
@@ -189,8 +209,11 @@ class ParsedNamespaceAxisSpecifier(AxisSpecifier):
 class ParsedParentAxisSpecifier(AxisSpecifier):
     def select(self, context, nodeTest):
         """Select the parent of the context node"""
-        parent = ((context.node.nodeType == Node.ATTRIBUTE_NODE) and
-                  context.node.ownerElement or context.node.parentNode)
+        parent = (
+            (context.node.nodeType == Node.ATTRIBUTE_NODE)
+            and context.node.ownerElement
+            or context.node.parentNode
+        )
         if parent and nodeTest(context, parent, self.principalType):
             result = [parent]
         else:
@@ -228,11 +251,15 @@ class ParsedPrecedingAxisSpecifier(AxisSpecifier):
                 self.descendants(context, nodeTest, sib, result)
                 doc_list.append(result)
                 sib = sib.previousSibling
-            curr = curr.nodeType == Node.ATTRIBUTE_NODE and curr.ownerElement or curr.parentNode
+            curr = (
+                curr.nodeType == Node.ATTRIBUTE_NODE
+                and curr.ownerElement
+                or curr.parentNode
+            )
 
         # Create a single list in document order
         result = []
-        for i in range(1, len(doc_list)+1):
+        for i in range(1, len(doc_list) + 1):
             result.extend(doc_list[-i])
         return (result, 1)
 
@@ -244,19 +271,19 @@ class ParsedSelfAxisSpecifier(AxisSpecifier):
             return ([context.node], 0)
         return ([], 0)
 
-g_classMap = {
-    'ancestor' : ParsedAncestorAxisSpecifier,
-    'ancestor-or-self' : ParsedAncestorOrSelfAxisSpecifier,
-    'child' : ParsedChildAxisSpecifier,
-    'parent' : ParsedParentAxisSpecifier,
-    'descendant' : ParsedDescendantAxisSpecifier,
-    'descendant-or-self' : ParsedDescendantOrSelfAxisSpecifier,
-    'attribute' : ParsedAttributeAxisSpecifier,
-    'following' : ParsedFollowingAxisSpecifier,
-    'following-sibling' : ParsedFollowingSiblingAxisSpecifier,
-    'preceding' : ParsedPrecedingAxisSpecifier,
-    'preceding-sibling' : ParsedPrecedingSiblingAxisSpecifier,
-    'namespace' : ParsedNamespaceAxisSpecifier,
-    'self' : ParsedSelfAxisSpecifier,
-    }
 
+g_classMap = {
+    "ancestor": ParsedAncestorAxisSpecifier,
+    "ancestor-or-self": ParsedAncestorOrSelfAxisSpecifier,
+    "child": ParsedChildAxisSpecifier,
+    "parent": ParsedParentAxisSpecifier,
+    "descendant": ParsedDescendantAxisSpecifier,
+    "descendant-or-self": ParsedDescendantOrSelfAxisSpecifier,
+    "attribute": ParsedAttributeAxisSpecifier,
+    "following": ParsedFollowingAxisSpecifier,
+    "following-sibling": ParsedFollowingSiblingAxisSpecifier,
+    "preceding": ParsedPrecedingAxisSpecifier,
+    "preceding-sibling": ParsedPrecedingSiblingAxisSpecifier,
+    "namespace": ParsedNamespaceAxisSpecifier,
+    "self": ParsedSelfAxisSpecifier,
+}

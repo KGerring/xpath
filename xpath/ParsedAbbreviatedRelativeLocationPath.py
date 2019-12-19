@@ -18,17 +18,18 @@ from xml.xpath import ParsedStep
 
 from . import Set
 
+
 class ParsedAbbreviatedRelativeLocationPath:
-    def __init__(self,left,right):
+    def __init__(self, left, right):
         """
         left can be a step or a relative location path
         right is only a step
         """
         self._left = left
         self._right = right
-        nt = ParsedNodeTest.ParsedNodeTest('node','')
+        nt = ParsedNodeTest.ParsedNodeTest("node", "")
         ppl = ParsedPredicateList.ParsedPredicateList([])
-        axisSpecifier = ParsedAxisSpecifier.ParsedAxisSpecifier('descendant-or-self')
+        axisSpecifier = ParsedAxisSpecifier.ParsedAxisSpecifier("descendant-or-self")
         self._middle = ParsedStep.ParsedStep(axisSpecifier, nt, ppl)
 
     def evaluate(self, context):
@@ -39,33 +40,31 @@ class ParsedAbbreviatedRelativeLocationPath:
         origState = context.copyNodePosSize()
 
         for ctr in range(l):
-            context.setNodePosSize((rt[ctr],ctr+1,l))
+            context.setNodePosSize((rt[ctr], ctr + 1, l))
             subRt = self._middle.select(context)
-            res = Set.Union(res,subRt)
+            res = Set.Union(res, subRt)
 
         rt = res
         res = []
         l = len(rt)
         for ctr in range(l):
-            context.setNodePosSize((rt[ctr],ctr+1,l))
+            context.setNodePosSize((rt[ctr], ctr + 1, l))
             subRt = self._right.select(context)
-            res = Set.Union(res,subRt)
-
+            res = Set.Union(res, subRt)
 
         context.setNodePosSize(origState)
         return res
+
     select = evaluate
 
-    def pprint(self, indent=''):
+    def pprint(self, indent=""):
         print((indent + str(self)))
-        self._left.pprint(indent + '  ')
-        self._middle.pprint(indent + '  ')
-        self._right.pprint(indent + '  ')
+        self._left.pprint(indent + "  ")
+        self._middle.pprint(indent + "  ")
+        self._right.pprint(indent + "  ")
 
     def __str__(self):
-        return '<AbbreviatedRelativeLocationPath at %x: %s>' % (
-            id(self),
-            repr(self),
-            )
+        return "<AbbreviatedRelativeLocationPath at %x: %s>" % (id(self), repr(self))
+
     def __repr__(self):
-        return repr(self._left) + '//' + repr(self._right)
+        return repr(self._left) + "//" + repr(self._right)

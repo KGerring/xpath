@@ -12,27 +12,30 @@ See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
 
 import string
-from xml.dom import Node,EMPTY_NAMESPACE
+from xml.dom import Node, EMPTY_NAMESPACE
 from xml.xpath import NamespaceNode
 from xml.xpath import NAMESPACE_NODE, RuntimeException
-from xml.xpath import g_xpathRecognizedNodes 
+from xml.xpath import g_xpathRecognizedNodes
+
 
 def ParsedNameTest(name):
-    if name == '*':
+    if name == "*":
         return PrincipalTypeTest()
-    index = string.find(name, ':')
-    if name[index:] == ':*':
+    index = string.find(name, ":")
+    if name[index:] == ":*":
         return LocalNameTest(name[:index])
     elif index >= 0:
-        return QualifiedNameTest(name[:index], name[index+1:])
+        return QualifiedNameTest(name[:index], name[index + 1 :])
     return NodeNameTest(name)
+
 
 def ParsedNodeTest(test, literal=None):
     if literal:
-        if test != 'processing-instruction':
-            raise SyntaxError('Literal only allowed in processing-instruction')
+        if test != "processing-instruction":
+            raise SyntaxError("Literal only allowed in processing-instruction")
         return ProcessingInstructionNodeTest(literal)
     return g_classMap[test]()
+
 
 class NodeTestBase:
     def match(self, context, node, principalType=Node.ELEMENT_NODE):
@@ -47,22 +50,21 @@ class NodeTestBase:
         print((indent + str(self)))
 
     def __str__(self):
-        return '<%s at %x: %s>' % (
-            self.__class__.__name__,
-            id(self),
-            repr(self),
-            )
+        return "<%s at %x: %s>" % (self.__class__.__name__, id(self), repr(self))
 
 
 class NodeTest(NodeTestBase):
     def __init__(self):
         self.priority = -0.5
-        
+
     def match(self, context, node, principalType=Node.ELEMENT_NODE):
-        return node.nodeType in g_xpathRecognizedNodes or isinstance(node,NamespaceNode.NamespaceNode)
+        return node.nodeType in g_xpathRecognizedNodes or isinstance(
+            node, NamespaceNode.NamespaceNode
+        )
 
     def __repr__(self):
-        return 'node()'
+        return "node()"
+
 
 class CommentNodeTest(NodeTestBase):
     def __init__(self):
@@ -72,8 +74,9 @@ class CommentNodeTest(NodeTestBase):
         return node.nodeType == Node.COMMENT_NODE
 
     def __repr__(self):
-        return 'comment()'
-    
+        return "comment()"
+
+
 class TextNodeTest(NodeTestBase):
     def __init__(self):
         self.priority = -0.5
@@ -82,7 +85,8 @@ class TextNodeTest(NodeTestBase):
         return node.nodeType in [Node.TEXT_NODE, Node.CDATA_SECTION_NODE]
 
     def __repr__(self):
-        return 'text()'
+        return "text()"
+
 
 class ProcessingInstructionNodeTest(NodeTestBase):
     def __init__(self, target=None):
@@ -93,7 +97,7 @@ class ProcessingInstructionNodeTest(NodeTestBase):
             self.target = target[1:-1]
         else:
             self.priority = -0.5
-            self.target = ''
+            self.target = ""
 
     def match(self, context, node, principalType=Node.ELEMENT_NODE):
         if node.nodeType != Node.PROCESSING_INSTRUCTION_NODE:
@@ -106,10 +110,12 @@ class ProcessingInstructionNodeTest(NodeTestBase):
         if self.target:
             target = repr(self.target)
         else:
-            target = ''
-        return 'processing-instruction(%s)' % target
+            target = ""
+        return "processing-instruction(%s)" % target
+
 
 # Name tests
+
 
 class PrincipalTypeTest(NodeTestBase):
     def __init__(self):
@@ -119,7 +125,8 @@ class PrincipalTypeTest(NodeTestBase):
         return node.nodeType == principalType
 
     def __repr__(self):
-        return '*'
+        return "*"
+
 
 class NodeNameTest(NodeTestBase):
     def __init__(self, nodeName):
@@ -134,24 +141,25 @@ class NodeNameTest(NodeTestBase):
     def __repr__(self):
         return self._nodeName
 
+
 class LocalNameTest(NodeTestBase):
     def __init__(self, prefix):
         self.priority = -0.25
         self._prefix = prefix
-        
+
     def match(self, context, node, principalType=Node.ELEMENT_NODE):
         if node.nodeType != principalType:
             return 0
         try:
             uri = self._prefix and context.processorNss[self._prefix] or EMPTY_NAMESPACE
         except KeyError:
-            raise RuntimeException(RuntimeException.UNDEFINED_PREFIX,
-                                   self._prefix)
+            raise RuntimeException(RuntimeException.UNDEFINED_PREFIX, self._prefix)
         return node.namespaceURI == uri
 
     def __repr__(self):
-        return self._prefix + ':*'
-    
+        return self._prefix + ":*"
+
+
 class QualifiedNameTest(NodeTestBase):
     def __init__(self, prefix, localName):
         self.priority = 0
@@ -164,17 +172,18 @@ class QualifiedNameTest(NodeTestBase):
                 try:
                     return node.namespaceURI == context.processorNss[self._prefix]
                 except KeyError:
-                    raise RuntimeException(RuntimeException.UNDEFINED_PREFIX,
-                                           self._prefix)
+                    raise RuntimeException(
+                        RuntimeException.UNDEFINED_PREFIX, self._prefix
+                    )
         return 0
 
     def __repr__(self):
-        return self._prefix + ':' + self._localName
+        return self._prefix + ":" + self._localName
+
 
 g_classMap = {
-    'node' : NodeTest,
-    'comment' : CommentNodeTest,
-    'text' : TextNodeTest,
-    'processing-instruction' : ProcessingInstructionNodeTest,
-    }
-             
+    "node": NodeTest,
+    "comment": CommentNodeTest,
+    "text": TextNodeTest,
+    "processing-instruction": ProcessingInstructionNodeTest,
+}

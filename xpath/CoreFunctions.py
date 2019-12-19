@@ -13,7 +13,7 @@ See  http://4suite.org/COPYRIGHT  for license and copyright information
 
 import string, io
 
-from xml.dom import Node,EMPTY_NAMESPACE
+from xml.dom import Node, EMPTY_NAMESPACE
 from xml.xpath import ExpandedNameWrapper
 from xml.xpath import NamespaceNode
 from xml.xpath import NaN, Inf
@@ -35,13 +35,16 @@ class Types:
     NodeSetType = 3
     ObjectType = 4
 
+
 import types
+
 try:
     g_stringTypes = [bytes, str]
 except:
     g_stringTypes = [bytes]
 
 ### Node Set Functions ###
+
 
 def Last(context):
     """Function: <number> last()"""
@@ -56,7 +59,9 @@ def Position(context):
 def Count(context, nodeSet):
     """Function: <number> count(<node-set>)"""
     if type(nodeSet) != type([]):
-        raise RuntimeException(RuntimeException.WRONG_ARGUMENTS, 'count', _("expected node set argument"))
+        raise RuntimeException(
+            RuntimeException.WRONG_ARGUMENTS, "count", _("expected node set argument")
+        )
     return len(nodeSet)
 
 
@@ -74,7 +79,9 @@ def Id(context, object):
         doc = context.node.ownerDocument or context.node
         elements = Util.ElementsById(doc.documentElement, id)
         if len(elements) > 1:
-            raise RuntimeException(RuntimeException.WRONG_ARGUMENTS, 'id', _("argument not unique"))
+            raise RuntimeException(
+                RuntimeException.WRONG_ARGUMENTS, "id", _("argument not unique")
+            )
         elif elements:
             # Must be 1
             rt.append(elements[0])
@@ -87,14 +94,16 @@ def LocalName(context, nodeSet=None):
         node = context.node
     else:
         if type(nodeSet) != type([]):
-            raise RuntimeException(RuntimeException.WRONG_ARGUMENTS, 'local-name', _("expected node set"))
+            raise RuntimeException(
+                RuntimeException.WRONG_ARGUMENTS, "local-name", _("expected node set")
+            )
         nodeSet = Util.SortDocOrder(nodeSet)
         if type(nodeSet) != type([]) or len(nodeSet) == 0:
-            return ''
+            return ""
         node = nodeSet[0]
     en = ExpandedName(node)
     if en == None or en.localName == None:
-        return ''
+        return ""
     return en.localName
 
 
@@ -104,14 +113,18 @@ def NamespaceUri(context, nodeSet=None):
         node = context.node
     else:
         if type(nodeSet) != type([]):
-            raise RuntimeException(RuntimeException.WRONG_ARGUMENTS, 'namespace-uri', _("expected node set"))
+            raise RuntimeException(
+                RuntimeException.WRONG_ARGUMENTS,
+                "namespace-uri",
+                _("expected node set"),
+            )
         nodeSet = Util.SortDocOrder(nodeSet)
         if type(nodeSet) != type([]) or len(nodeSet) == 0:
-            return ''
+            return ""
         node = nodeSet[0]
     en = ExpandedName(node)
     if en == None or en.namespaceURI == None:
-        return ''
+        return ""
     return en.namespaceURI
 
 
@@ -121,18 +134,21 @@ def Name(context, nodeSet=None):
         node = context.node
     else:
         if type(nodeSet) != type([]):
-            raise RuntimeException(RuntimeException.WRONG_ARGUMENTS, 'name', _("expected node set"))
+            raise RuntimeException(
+                RuntimeException.WRONG_ARGUMENTS, "name", _("expected node set")
+            )
         nodeSet = Util.SortDocOrder(nodeSet)
         if type(nodeSet) != type([]) or len(nodeSet) == 0:
-            return ''
+            return ""
         node = nodeSet[0]
     en = ExpandedName(node)
     if en == None:
-        return ''
+        return ""
     return en.qName
 
 
 ### String Functions ###
+
 
 def String(context, object=None):
     """Function: <string> string(<object>?)"""
@@ -146,16 +162,19 @@ def String(context, object=None):
 def Concat(context, *args):
     """Function: <string> concat(<string>, <string>, ...)"""
     if len(args) < 1:
-        raise RuntimeException(RuntimeException.WRONG_ARGUMENTS, 'concat', _("at least 2 arguments expected"))
-    return reduce(lambda a,b,c=context: a + Conversions.StringValue(b),
-                  args, '')
+        raise RuntimeException(
+            RuntimeException.WRONG_ARGUMENTS,
+            "concat",
+            _("at least 2 arguments expected"),
+        )
+    return reduce(lambda a, b, c=context: a + Conversions.StringValue(b), args, "")
 
 
 def StartsWith(context, outer, inner):
     """Function: <string> starts-with(<string>, <string>)"""
     outer = Conversions.StringValue(outer)
     inner = Conversions.StringValue(inner)
-    return outer[:len(inner)] == inner and boolean.true or boolean.false
+    return outer[: len(inner)] == inner and boolean.true or boolean.false
 
 
 def Contains(context, outer, inner):
@@ -174,7 +193,7 @@ def SubstringBefore(context, outer, inner):
     inner = Conversions.StringValue(inner)
     index = string.find(outer, inner)
     if index == -1:
-        return ''
+        return ""
     return outer[:index]
 
 
@@ -184,8 +203,8 @@ def SubstringAfter(context, outer, inner):
     inner = Conversions.StringValue(inner)
     index = string.find(outer, inner)
     if index == -1:
-        return ''
-    return outer[index+len(inner):]
+        return ""
+    return outer[index + len(inner) :]
 
 
 def Substring(context, st, start, end=None):
@@ -193,7 +212,7 @@ def Substring(context, st, start, end=None):
     st = Conversions.StringValue(st)
     start = Conversions.NumberValue(start)
     if start is NaN:
-        return ''
+        return ""
     start = int(round(start))
     start = start > 1 and start - 1 or 0
 
@@ -203,7 +222,7 @@ def Substring(context, st, start, end=None):
     if start is NaN:
         return st[start:]
     end = int(round(end))
-    return st[start:start+end]
+    return st[start : start + end]
 
 
 def StringLength(context, st=None):
@@ -229,15 +248,15 @@ def Translate(context, source, fromChars, toChars):
 
     # string.maketrans/translate do not handle unicode
     translate = {}
-    for from_char, to_char in map(None, fromChars, toChars):
+    for from_char, to_char in zip(fromChars, toChars):
         translate[ord(from_char)] = to_char
 
-    result = reduce(lambda a, b, t=translate:
-                    a + (t.get(ord(b), b) or ''),
-                    source, '')
+    result = reduce(lambda a, b, t=translate: a + (t.get(ord(b), b) or ""), source, "")
     return result
 
+
 ### Boolean Functions ###
+
 
 def _Boolean(context, object):
     """Function: <boolean> boolean(<object>)"""
@@ -249,12 +268,12 @@ def Not(context, object):
     return (not Conversions.BooleanValue(object) and boolean.true) or boolean.false
 
 
-def True(context):
+def True_(context):
     """Function: <boolean> true()"""
     return boolean.true
 
 
-def False(context):
+def False_(context):
     """Function: <boolean> false()"""
     return boolean.false
 
@@ -264,19 +283,29 @@ def Lang(context, lang):
     lang = string.upper(Conversions.StringValue(lang))
     node = context.node
     while node:
-        lang_attr = [x for x in list(node.attributes.values()) if x.name == 'xml:lang' and x.value]
+        lang_attr = [
+            x
+            for x in list(node.attributes.values())
+            if x.name == "xml:lang" and x.value
+        ]
         value = lang_attr and lang_attr[0].nodeValue or None
         if value:
             # See if there is a suffix
-            index = string.find(value, '-')
+            index = string.find(value, "-")
             if index != -1:
                 value = value[:index]
             value = string.upper(value)
             return value == lang and boolean.true or boolean.false
-        node = node.nodeType == Node.ATTRIBUTE_NODE and node.ownerElement or node.parentNode
+        node = (
+            node.nodeType == Node.ATTRIBUTE_NODE
+            and node.ownerElement
+            or node.parentNode
+        )
     return boolean.false
 
+
 ### Number Functions ###
+
 
 def Number(context, object=None):
     """Function: <number> number(<object>?)"""
@@ -288,14 +317,14 @@ def Number(context, object=None):
 def Sum(context, nodeSet):
     """Function: <number> sum(<node-set>)"""
     nns = [Conversions.NumberValue(x) for x in nodeSet]
-    return reduce(lambda x,y: x+y, nns, 0)
+    return reduce(lambda x, y: x + y, nns, 0)
 
 
 def Floor(context, number):
     """Function: <number> floor(<number>)"""
     number = Conversions.NumberValue(number)
-    #if type(number) in g_stringTypes:
-    #    number = string.atof(number)        
+    # if type(number) in g_stringTypes:
+    #    number = string.atof(number)
     if int(number) == number:
         return number
     elif number < 0:
@@ -307,7 +336,7 @@ def Floor(context, number):
 def Ceiling(context, number):
     """Function: <number> ceiling(<number>)"""
     number = Conversions.NumberValue(number)
-    #if type(number) in g_stringTypes:
+    # if type(number) in g_stringTypes:
     #    number = string.atof(number)
     if int(number) == number:
         return number
@@ -322,11 +351,18 @@ def Round(context, number):
     number = Conversions.NumberValue(number)
     return round(number, 0)
 
+
 ### Helper Functions ###
+
 
 def ExpandedName(node):
     """Get the expanded name of any object"""
-    if hasattr(node, 'nodeType') and node.nodeType in [Node.ELEMENT_NODE, Node.PROCESSING_INSTRUCTION_NODE, Node.ATTRIBUTE_NODE, NAMESPACE_NODE]:
+    if hasattr(node, "nodeType") and node.nodeType in [
+        Node.ELEMENT_NODE,
+        Node.PROCESSING_INSTRUCTION_NODE,
+        Node.ATTRIBUTE_NODE,
+        NAMESPACE_NODE,
+    ]:
         return ExpandedNameWrapper.ExpandedNameWrapper(node)
     return None
 
@@ -334,36 +370,34 @@ def ExpandedName(node):
 ### Function Mappings ###
 
 CoreFunctions = {
-    (EMPTY_NAMESPACE, 'last'): Last,
-    (EMPTY_NAMESPACE, 'position'): Position,
-    (EMPTY_NAMESPACE, 'count'): Count,
-    (EMPTY_NAMESPACE, 'id'): Id,
-    (EMPTY_NAMESPACE, 'local-name'): LocalName,
-    (EMPTY_NAMESPACE, 'namespace-uri'): NamespaceUri,
-    (EMPTY_NAMESPACE, 'name'): Name,
-    (EMPTY_NAMESPACE, 'string'): String,
-    (EMPTY_NAMESPACE, 'concat'): Concat,
-    (EMPTY_NAMESPACE, 'starts-with'): StartsWith,
-    (EMPTY_NAMESPACE, 'contains'): Contains,
-    (EMPTY_NAMESPACE, 'substring-before'): SubstringBefore,
-    (EMPTY_NAMESPACE, 'substring-after'): SubstringAfter,
-    (EMPTY_NAMESPACE, 'substring'): Substring,
-    (EMPTY_NAMESPACE, 'string-length'): StringLength,
-    (EMPTY_NAMESPACE, 'normalize-space'): Normalize,
-    (EMPTY_NAMESPACE, 'translate'): Translate,
-    (EMPTY_NAMESPACE, 'boolean'): _Boolean,
-    (EMPTY_NAMESPACE, 'not'): Not,
-    (EMPTY_NAMESPACE, 'true'): True,
-    (EMPTY_NAMESPACE, 'false'): False,
-    (EMPTY_NAMESPACE, 'lang'): Lang,
-    (EMPTY_NAMESPACE, 'number'): Number,
-    (EMPTY_NAMESPACE, 'sum'): Sum,
-    (EMPTY_NAMESPACE, 'floor'): Floor,
-    (EMPTY_NAMESPACE, 'ceiling'): Ceiling,
-    (EMPTY_NAMESPACE, 'round'): Round,
-    (EMPTY_NAMESPACE, 'expanded-name'): ExpandedName
-    }
+    (EMPTY_NAMESPACE, "last"): Last,
+    (EMPTY_NAMESPACE, "position"): Position,
+    (EMPTY_NAMESPACE, "count"): Count,
+    (EMPTY_NAMESPACE, "id"): Id,
+    (EMPTY_NAMESPACE, "local-name"): LocalName,
+    (EMPTY_NAMESPACE, "namespace-uri"): NamespaceUri,
+    (EMPTY_NAMESPACE, "name"): Name,
+    (EMPTY_NAMESPACE, "string"): String,
+    (EMPTY_NAMESPACE, "concat"): Concat,
+    (EMPTY_NAMESPACE, "starts-with"): StartsWith,
+    (EMPTY_NAMESPACE, "contains"): Contains,
+    (EMPTY_NAMESPACE, "substring-before"): SubstringBefore,
+    (EMPTY_NAMESPACE, "substring-after"): SubstringAfter,
+    (EMPTY_NAMESPACE, "substring"): Substring,
+    (EMPTY_NAMESPACE, "string-length"): StringLength,
+    (EMPTY_NAMESPACE, "normalize-space"): Normalize,
+    (EMPTY_NAMESPACE, "translate"): Translate,
+    (EMPTY_NAMESPACE, "boolean"): _Boolean,
+    (EMPTY_NAMESPACE, "not"): Not,
+    (EMPTY_NAMESPACE, "true"): True_,
+    (EMPTY_NAMESPACE, "false"): False_,
+    (EMPTY_NAMESPACE, "lang"): Lang,
+    (EMPTY_NAMESPACE, "number"): Number,
+    (EMPTY_NAMESPACE, "sum"): Sum,
+    (EMPTY_NAMESPACE, "floor"): Floor,
+    (EMPTY_NAMESPACE, "ceiling"): Ceiling,
+    (EMPTY_NAMESPACE, "round"): Round,
+    (EMPTY_NAMESPACE, "expanded-name"): ExpandedName,
+}
 
-Args = {
-    Substring : (Types.StringType, [Types.StringType, Types.StringType]),
-    }
+Args = {Substring: (Types.StringType, [Types.StringType, Types.StringType])}

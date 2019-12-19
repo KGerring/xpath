@@ -14,9 +14,13 @@ See  http://4suite.org/COPYRIGHT  for license and copyright information
 from xml.xpath import Conversions
 import types
 from functools import reduce
+
 NumberTypes = [int, int, float]
+
+
 class StringException(Exception):
     pass
+
 
 class ParsedPredicateList:
     def __init__(self, preds):
@@ -28,7 +32,7 @@ class ParsedPredicateList:
         self._predicates = preds
         self._length = len(preds)
 
-    def append(self,pred):
+    def append(self, pred):
         self._predicates.append(pred)
         self._length = self._length + 1
 
@@ -61,20 +65,15 @@ class ParsedPredicateList:
     def __len__(self):
         return self._length
 
-    def pprint(self, indent=''):
+    def pprint(self, indent=""):
         print((indent + str(self)))
         for pred in self._predicates:
-            pred.pprint(indent + '  ')
+            pred.pprint(indent + "  ")
 
     def __str__(self):
-        return '<PredicateList at %x: %s>' % (
-            id(self),
-            repr(self) or '(empty)',
-            )
+        return "<PredicateList at %x: %s>" % (id(self), repr(self) or "(empty)")
 
     def __repr__(self):
-        return reduce(lambda result, pred:
-                      result + '[%s]' % repr(pred),
-                      self._predicates,
-                      ''
-                      )
+        return reduce(
+            lambda result, pred: result + "[%s]" % repr(pred), self._predicates, ""
+        )

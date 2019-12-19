@@ -28,7 +28,9 @@ def ElementsById(element, name):
     attrs = element.attributes
     idattr = attrs.get((EMPTY_NAMESPACE, "id")) or attrs.get((EMPTY_NAMESPACE, "ID"))
     idattr and idattr.value == name and elements.append(idattr.ownerElement)
-    for element in [node for node in element.childNodes if node.nodeType == Node.ELEMENT_NODE]:
+    for element in [
+        node for node in element.childNodes if node.nodeType == Node.ELEMENT_NODE
+    ]:
         elements.extend(ElementsById(element, name))
     return elements
 

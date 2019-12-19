@@ -14,15 +14,11 @@ See  http://4suite.org/COPYRIGHT  for license and copyright information
 import xml.dom.ext
 from . import CoreFunctions
 
+
 class Context:
     functions = CoreFunctions.CoreFunctions
 
-    def __init__(self,
-                 node,
-                 position=1,
-                 size=1,
-                 varBindings=None,
-                 processorNss=None):
+    def __init__(self, node, position=1, size=1, varBindings=None, processorNss=None):
         self.node = node
         self.position = position
         self.size = size
@@ -38,8 +34,8 @@ class Context:
             id(self),
             self.node,
             self.position,
-            self.size
-            )
+            self.size,
+        )
 
     def nss(self):
         if self._cachedNss is None or self.node != self._cachedNssNode:
@@ -61,14 +57,14 @@ class Context:
         self.varBindings = varBindings
 
     def copyVarBindings(self):
-        #FIXME: should this be deep copy, because of the possible list entries?
+        # FIXME: should this be deep copy, because of the possible list entries?
         return self.varBindings.copy()
 
     def copyNodePosSize(self):
         return (self.node, self.position, self.size)
 
     def setNodePosSize(self, xxx_todo_changeme):
-        (node,pos,size) = xxx_todo_changeme
+        (node, pos, size) = xxx_todo_changeme
         self.node = node
         self.position = pos
         self.size = size
@@ -78,6 +74,5 @@ class Context:
         newdict["varBindings"] = self.varBindings.copy()
         return newdict
 
-    def set(self,d):
+    def set(self, d):
         self.__dict__ = d
-

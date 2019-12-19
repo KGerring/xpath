@@ -11,8 +11,8 @@ See  http://4suite.org/COPYRIGHT  for license and copyright information
 """
 
 NAMESPACE_NODE = 10000
-FT_OLD_EXT_NAMESPACE = 'http://xmlns.4suite.org/xpath/extensions'
-FT_EXT_NAMESPACE = 'http://xmlns.4suite.org/ext'
+FT_OLD_EXT_NAMESPACE = "http://xmlns.4suite.org/xpath/extensions"
+FT_EXT_NAMESPACE = "http://xmlns.4suite.org/ext"
 
 # Simple trick (thanks Tim Peters) to enable crippled IEEE 754 support
 # until ANSI C (or Python) sorts it all out...
@@ -23,16 +23,17 @@ from xml.dom import Node
 from xml.FtCore import FtException
 
 g_xpathRecognizedNodes = [
-        Node.ELEMENT_NODE,
-        Node.ATTRIBUTE_NODE,
-        Node.TEXT_NODE,
-        Node.CDATA_SECTION_NODE,
-        Node.DOCUMENT_NODE,
-        Node.PROCESSING_INSTRUCTION_NODE,
-        Node.COMMENT_NODE
-        ]
+    Node.ELEMENT_NODE,
+    Node.ATTRIBUTE_NODE,
+    Node.TEXT_NODE,
+    Node.CDATA_SECTION_NODE,
+    Node.DOCUMENT_NODE,
+    Node.PROCESSING_INSTRUCTION_NODE,
+    Node.COMMENT_NODE,
+]
 
 g_extFunctions = {}
+
 
 class CompiletimeException(FtException):
     INTERNAL = 1
@@ -41,6 +42,7 @@ class CompiletimeException(FtException):
 
     def __init__(self, errorCode, *args):
         FtException.__init__(self, errorCode, MessageSource.COMPILETIME, args)
+
 
 class RuntimeException(FtException):
     INTERNAL = 1
@@ -52,14 +54,17 @@ class RuntimeException(FtException):
     def __init__(self, errorCode, *args):
         FtException.__init__(self, errorCode, MessageSource.RUNTIME, args)
 
+
 from .XPathParserBase import SyntaxException
 
 from . import MessageSource
 
+
 def Evaluate(expr, contextNode=None, context=None):
     import os
-    if 'EXTMODULES' in os.environ:
-        RegisterExtensionModules(os.environ["EXTMODULES"].split(':'))
+
+    if "EXTMODULES" in os.environ:
+        RegisterExtensionModules(os.environ["EXTMODULES"].split(":"))
 
     if context:
         con = context
@@ -78,6 +83,7 @@ def Compile(expr):
         raise CompiletimeException(CompiletimeException.SYNTAX, str(error))
     except:
         import traceback, io
+
         stream = io.StringIO()
         traceback.print_exc(None, stream)
         raise RuntimeException(RuntimeException.INTERNAL, stream.getvalue())
@@ -92,14 +98,14 @@ def RegisterExtensionModules(moduleNames):
     mods = []
     for mod_name in mod_names:
         if mod_name:
-            mod = __import__(mod_name,{},{},['ExtFunctions'])
-            if hasattr(mod,'ExtFunctions'):
+            mod = __import__(mod_name, {}, {}, ["ExtFunctions"])
+            if hasattr(mod, "ExtFunctions"):
                 g_extFunctions.update(mod.ExtFunctions)
                 mods.append(mod)
     return mods
 
 
-#Allow access to the NormalizeNode function
+# Allow access to the NormalizeNode function
 from .Util import NormalizeNode
 
 from . import Context
@@ -107,9 +113,10 @@ from . import Context
 try:
     import XPathParserc
 except ImportError:
-    #import XPathParser
-    #parser = XPathParser
+    # import XPathParser
+    # parser = XPathParser
     from .pyxpath import ExprParserFactory
+
     parser = ExprParserFactory
 else:
     parser = XPathParserc
@@ -117,6 +124,7 @@ else:
 
 def Init():
     from xml.xpath import BuiltInExtFunctions
+
     g_extFunctions.update(BuiltInExtFunctions.ExtFunctions)
 
 
